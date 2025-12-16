@@ -215,6 +215,12 @@ docker compose restart haproxy
 Règles :
 - Clé : `product:{id}`
 - TTL : 30 à 120 secondes (à justifier)
+
+```
+Choix d'un TTL = 60
+Pour avoir un bon équilibre entre l'efficacité et la praticité
+```
+
 - Cache-aside :
   1. Lecture Redis
   2. Miss → DB replica
@@ -341,6 +347,17 @@ Relancer une écriture via l’API.
 La réplication sert à copier les données (souvent pour améliorer les lectures), tandis que la haute disponibilité sert à garantir que le service reste accessible automatiquement en cas de panne.
 
 2. Qu’est-ce qui est manuel ici ? Automatique ?
+
+Automatique :
+
+- Lecture sur bdd primaire si secondaire down
+- Arret du cache lorsque Redis down
+
+Manuel :
+
+- Ecriture dans secondaire si primaire down (changement de master)
+- Redémarrage des containers
+
 3. Risques cache + réplication ?
 
 Que le cache et la réplication ne soit pas iso
