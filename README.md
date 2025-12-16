@@ -42,8 +42,7 @@
 ## 📦 Prérequis
 
 - Docker + Docker Compose
-- Node.js **ou** Python
-- `curl` ou Postman
+- Node.js (Express)
 - Connaissances de base SQL et API REST
 
 ---
@@ -239,9 +238,24 @@ Lors d’un `PUT /products/:id` :
 ❓ Question :
 Pourquoi peut-on lire une ancienne valeur ?
 
+
+```
+Nous pouvons lire une ancienne valeur car celle-ci est toujours enregistré en cache et que le ttl n'est pas terminé ou bien est toujours présente dans la base de donnée secondaire dû à la latence de réplication.
+```
+
+
+
 ➡️ Expliquez :
 - latence de réplication
 - effet du cache
+
+```
+Latence de réplication :
+Temps que mets la requête à parcourir le réseau et à s'éxécuter sur la seconde base de donnée.
+Effet du cache :
+Le cache permet de ne pas requêter une base de donnée lorsque celle-ci a déjà retourné une réponse à une requête similaire.
+Attention, en fonction du ttl, des données non à jour peuvent être renvoyé.
+```
 
 ---
 
@@ -265,7 +279,6 @@ docker compose stop db-replica
 
 ➡️ Choisissez :
 - fallback vers primary
-- ou erreur explicite
 
 ---
 
@@ -324,9 +337,19 @@ Relancer une écriture via l’API.
 ## 📝 Questions finales (rapport)
 
 1. Différence entre réplication et haute disponibilité ?
+
+La réplication sert à copier les données (souvent pour améliorer les lectures), tandis que la haute disponibilité sert à garantir que le service reste accessible automatiquement en cas de panne.
+
 2. Qu’est-ce qui est manuel ici ? Automatique ?
 3. Risques cache + réplication ?
+
+Que le cache et la réplication ne soit pas iso
+
 4. Comment améliorer cette architecture en production ?
+
+Mettre l'api dans le réseau docker
+Reconnecter le cache si le redis se ré-up
+
 
 ---
 
